@@ -1,0 +1,10 @@
+/*
+
+__pycache__/
+
+!.gitignore
+!app.py
+!requirements.txt
+!lib/
+!LICENSE
+
