@@ -1,0 +1,62 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "Batch downloader config",
+    "description": "The configuration for the khdl batch download feature",
+    "properties": {
+        "defaultFormat": {
+            "type": "string",
+            "enum": [
+                "mp3",
+                "flac",
+                "m4a"
+            ],
+            "description": "This format will be used when no format is specified for a soundtrack"
+        },
+        "soundtracks": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "description": "URL or id of a soundtrack on KHInsider"
+                    },
+                    {
+                        "type": "object",
+                        "required": [
+                            "soundtrack"
+                        ],
+                        "properties": {
+                            "soundtrack": {
+                                "type": "string",
+                                "description": "URL or id of a soundtrack on KHInsider"
+                            },
+                            "format": {
+                                "type": "string",
+                                "enum": [
+                                    "mp3",
+                                    "flac",
+                                    "m4a"
+                                ],
+                                "description": "Requested format of soundtrack"
+                            },
+                            "output": {
+                                "type": "string",
+                                "description": "Name of directory the soundtrack will be placed in"
+                            },
+                            "images": {
+                                "type": "boolean",
+                                "description": "Download images from khinsider along with the music or not"
+                            }
+                        }
+                    }
+                ]
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "defaultFormat",
+        "soundtracks"
+    ]
+}

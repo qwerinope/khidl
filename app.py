@@ -4,19 +4,25 @@ from lib.args import *
 from lib.soundtrack import *
 from lib.downloader import *
 
+def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
+    ost = Soundtrack(soundtrackId)
+    filelist = preDownloadMusic(ost, wantedFormat)
+    outputDir = outDir if outDir else ost.name
+    if getImages:
+        filelist += ost.images
+    download(filelist, outputDir)
+    print(f"Downloaded '{ost.name}' to '{outputDir}'")
+
+
 if __name__ == "__main__": # Start: only executes when running script directly
-    soundtrack, outputdir, requestedformat = getArguments()
-    ost = Soundtrack(soundtrack)
+    command, data = getArguments()
+    match command:
+        case "download":
+            # The data object consists of: (soundtrackId, wantedFormat, outDir, getImages)
+            downloadManager(data[0], data[1], data[2], data[3])
 
-    if requestedformat and requestedformat in ost.formats:
-        format = requestedformat
-    else:
-        format = 'mp3'
-
-    if not outputdir:
-        outputdir = ost.name
-
-    filelist = preDownloadMusic(ost, format)
-    filelist = filelist + ost.images
-    download(filelist, outputdir)
-    print(f"Downloaded '{ost.name}' to '{outputdir}'")
+        case "batch":
+            # The data object consists of: [{soundtrack: id, format: wantedFormat, output: outDir, images: getImages}]
+            print(f"Succesfully parsed configuration.\nDownloading {len(data)} soundtracks.")
+            for ost in data:
+                downloadManager(ost['soundtrack'], ost['format'], ost['output'], ost['images'])

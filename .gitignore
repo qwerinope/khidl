@@ -7,4 +7,4 @@ __pycache__/
 !requirements.txt
 !lib/
 !LICENSE
-
+!schema.json

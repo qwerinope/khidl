@@ -1,6 +1,5 @@
 BASEURL="https://downloads.khinsider.com"
 import requests, bs4
-from urllib.parse import unquote
 
 class Soundtrack:
     """ Representative of a soundtrack on KHinsider
@@ -17,17 +16,17 @@ class Soundtrack:
 
     def __init__(self, id:str):
         self.id = id
-        self.url = self.getURL()
-        self.pageinstance = self.getPage()
-        self.name = self.getName()
-        self.images = self.getImages()
-        self.formats = self.getFormats()
-        self.tracks = self.getTracks()
+        self.url = self._getURL()
+        self.pageinstance = self._getPage()
+        self.name = self._getName()
+        self.images = self._getImages()
+        self.formats = self._getFormats()
+        self.tracks = self._getTracks()
 
-    def getURL(self):
+    def _getURL(self):
         return f'{BASEURL}/game-soundtracks/album/{self.id}'
 
-    def getPage(self):
+    def _getPage(self):
         raw = requests.get(self.url)
         firstparser = bs4.BeautifulSoup(raw.text, 'html.parser')
         
@@ -38,7 +37,7 @@ class Soundtrack:
 
         return parser
 
-    def getName(self):
+    def _getName(self):
         # NOTE: This could also be done by using the information txt file. However, i don't give a shit. Maybe later I will.
         parser = self.pageinstance
 
@@ -52,7 +51,7 @@ class Soundtrack:
 
         return ostname
 
-    def getImages(self):
+    def _getImages(self):
         parser = self.pageinstance
         images = []
         imagecontainers = parser.find_all("div", "albumImage") or []
@@ -62,7 +61,7 @@ class Soundtrack:
 
         return images
 
-    def getFormats(self):
+    def _getFormats(self):
         parser = self.pageinstance
         header = parser.select_one('#songlist_header')
         columns = header.find_all('b') if header else []
@@ -73,7 +72,7 @@ class Soundtrack:
         ]
         return formats
 
-    def getTracks(self):
+    def _getTracks(self):
         parser = self.pageinstance
         songlist = parser.select_one('#songlist')
 
@@ -88,8 +87,8 @@ class Soundtrack:
         trackURLs = [f'{BASEURL}{tracklink}' for tracklink in anchors]
         return trackURLs
 
-class OSTParsingError(BaseException):
+class OSTParsingError(Exception):
     pass
 
-class OSTNotFound(BaseException):
+class OSTNotFound(Exception):
     pass

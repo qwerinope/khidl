@@ -6,7 +6,6 @@ from typing import List, Literal
 from tqdm import tqdm
 from lib.soundtrack import Soundtrack
 
-
 def preDownloadMusic(soundtrack:Soundtrack, format:Literal['mp3', 'flac', 'm4a']):
     print(f"Downloading '{soundtrack.name}'...")
     urls = []
