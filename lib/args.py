@@ -28,14 +28,18 @@ def getArguments():
 
     downloadcmd = subparser.add_parser('download', help="download a specific soundtrack")
     downloadcmd.set_defaults(func=downloadParser)
-    downloadcmd.add_argument("request", help="the soundtrack name or url the user wishes to download", nargs=1)
-    downloadcmd.add_argument("output", help="store the resulting music in a specified directory", default=None, nargs='?')
+    downloadcmd.add_argument("request", help="the soundtrack name or url the user wishes to download", nargs=1, type=str)
+    downloadcmd.add_argument("output", help="store the resulting music in a specified directory", default=None, nargs='?', type=str)
     downloadcmd.add_argument("-f", "--format", help="the requested audio format, can be 'mp3', 'flac' or 'm4a'", type=str, choices=['mp3', 'flac', 'm4a'], default='mp3', nargs='?')
     downloadcmd.add_argument("--no-images", help="don't download the images on the specific soundtrack", action='store_true', default=False)
 
     jsoncmd = subparser.add_parser('batch', help="download multiple pre-defined soundtracks", description="download multiple soundtracks specified in a configuration file")
     jsoncmd.set_defaults(func=batchParser)
     jsoncmd.add_argument('-i', '--init', help="create a default configuration for batch downloading", action='store_true', default=False)
+
+    searchcmd = subparser.add_parser('search', help="search KHInsider for soundtracks", description="use the search function on KHInsider and list all found soundtracks")
+    searchcmd.set_defaults(func=searchParser)
+    searchcmd.add_argument('query', help='search query', nargs=1, type=str)
 
     args = parser.parse_args()
     return args.func(args)
@@ -66,7 +70,6 @@ def batchParser(args):
 
     r = requests.get("https://raw.githubusercontent.com/qweri0p/khdl/refs/heads/main/schema.json")
     schema = json.loads(r.text)
-    # schema = json.loads(Path('schema.json').read_text())
 
     try:
         validate(instance=cfg, schema=schema)
@@ -81,19 +84,23 @@ def batchParser(args):
             soundtrack = soundtrack.rsplit(str('/'), 1)[-1]
 
         if isinstance(item, dict):
-            batchobj.append({
-                "soundtrack": soundtrack,
-                "format": item.get("format", cfg["defaultFormat"]),
-                "output": item.get("output", None),
-                "images": item.get("images", True)
-            })
+            batchobj.append((
+                soundtrack,
+                item.get("format", cfg["defaultFormat"]),
+                item.get("output", None),
+                item.get("images", True)
+            ))
 
         elif isinstance(item, str): # This executes if the soundtrack is noted without object
-            batchobj.append({
-                "soundtrack": soundtrack,
-                "format": cfg["defaultFormat"],
-                "output": None,
-                "images": True
-            })
+            batchobj.append((
+                soundtrack,
+                cfg["defaultFormat"],
+                None,
+                True
+            ))
 
     return "batch", batchobj
+
+def searchParser(args):
+
+    return "search", ()

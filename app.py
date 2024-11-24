@@ -1,11 +1,18 @@
 EXAMPLEID="katamari-damacy-reroll-ps4-switch-windows-xbox-one-gamerip-2018"
 
-from lib.args import *
-from lib.soundtrack import *
-from lib.downloader import *
+from lib.args import getArguments
+from lib.soundtrack import Soundtrack
+from lib.downloader import preDownloadMusic, download
+
+class FormatNotAvailable(Exception):
+    pass
 
 def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
     ost = Soundtrack(soundtrackId)
+
+    if wantedFormat not in ost.formats:
+        raise FormatNotAvailable
+
     filelist = preDownloadMusic(ost, wantedFormat)
     outputDir = outDir if outDir else ost.name
     if getImages:
@@ -13,16 +20,18 @@ def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
     download(filelist, outputDir)
     print(f"Downloaded '{ost.name}' to '{outputDir}'")
 
-
 if __name__ == "__main__": # Start: only executes when running script directly
     command, data = getArguments()
     match command:
         case "download":
-            # The data object consists of: (soundtrackId, wantedFormat, outDir, getImages)
-            downloadManager(data[0], data[1], data[2], data[3])
+            # The data tuple consists of: (soundtrackId, wantedFormat, outDir, getImages)
+            downloadManager(*data)
 
         case "batch":
-            # The data object consists of: [{soundtrack: id, format: wantedFormat, output: outDir, images: getImages}]
+            # The data array contains tuples that consist of: (soundtrackId, wantedFormat, outDir, getImages)
             print(f"Succesfully parsed configuration.\nDownloading {len(data)} soundtracks.")
             for ost in data:
-                downloadManager(ost['soundtrack'], ost['format'], ost['output'], ost['images'])
+                downloadManager(*ost)
+        case "search":
+            pass
+
