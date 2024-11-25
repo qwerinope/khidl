@@ -39,7 +39,8 @@ def getArguments():
 
     searchcmd = subparser.add_parser('search', help="search KHInsider for soundtracks", description="use the search function on KHInsider and list all found soundtracks")
     searchcmd.set_defaults(func=searchParser)
-    searchcmd.add_argument('query', help='search query', nargs=1, type=str)
+    searchcmd.add_argument('query', help="search query", nargs='+', type=str)
+    searchcmd.add_argument('--song', help="search for soundtracks containing a specific song", action='store_true', default=False)
 
     args = parser.parse_args()
     return args.func(args)
@@ -102,5 +103,6 @@ def batchParser(args):
     return "batch", batchobj
 
 def searchParser(args):
+    finalquery = f"https://downloads.khinsider.com/search?search={' '.join(args.query)}&albumListSize=compact&type={args.song if args.song else ''}&sort=name"
 
-    return "search", ()
+    return "search", finalquery

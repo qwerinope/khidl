@@ -3,6 +3,7 @@ EXAMPLEID="katamari-damacy-reroll-ps4-switch-windows-xbox-one-gamerip-2018"
 from lib.args import getArguments
 from lib.soundtrack import Soundtrack
 from lib.downloader import preDownloadMusic, download
+from lib.search import search
 
 class FormatNotAvailable(Exception):
     pass
@@ -33,5 +34,6 @@ if __name__ == "__main__": # Start: only executes when running script directly
             for ost in data:
                 downloadManager(*ost)
         case "search":
-            pass
+            # Data is a URL to the search page on KHInsider
+            search(data)
 
