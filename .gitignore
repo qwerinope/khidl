@@ -2,6 +2,7 @@
 
 __pycache__/
 
+!Makefile
 !.gitignore
 !develrun.py
 !khidl/
