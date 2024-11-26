@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "khidl"
 version = "1.0"
 description = "Download soundtracks from KHInsider"
-authors = [{ name = "qweri0p", email = "your.email@example.com" }]
+authors = [{ name = "qweri0p" }]
 dependencies = [
 	"beautifulsoup4",
 	"requests",

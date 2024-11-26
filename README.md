@@ -12,7 +12,7 @@ Then run:
 pip install khidl.whl
 ```
 
-## Basic Usage
+## Usage
 
 ### Download
 
