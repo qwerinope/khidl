@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "khidl"
+version = "1.0"
+description = "Download soundtracks from KHInsider"
+authors = [{ name = "qweri0p", email = "your.email@example.com" }]
+dependencies = [
+	"beautifulsoup4",
+	"requests",
+	"tqdm",
+	"jsonschema",
+	"prettytable",
+]
+
+[project.scripts]
+khidl = "khidl.app:CLI"

@@ -1,9 +1,7 @@
-EXAMPLEID="katamari-damacy-reroll-ps4-switch-windows-xbox-one-gamerip-2018"
-
-from lib.args import getArguments
-from lib.soundtrack import Soundtrack
-from lib.downloader import preDownloadMusic, download
-from lib.search import search
+from khidl.lib.args import getArguments
+from khidl.lib.soundtrack import Soundtrack
+from khidl.lib.downloader import preDownloadMusic, download
+from khidl.lib.search import search
 
 class FormatNotAvailable(Exception):
     pass
@@ -21,7 +19,7 @@ def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
     download(filelist, outputDir)
     print(f"Downloaded '{ost.name}' to '{outputDir}'")
 
-if __name__ == "__main__": # Start: only executes when running script directly
+def CLI():
     command, data = getArguments()
     match command:
         case "download":
@@ -37,3 +35,7 @@ if __name__ == "__main__": # Start: only executes when running script directly
             # Data is a URL to the search page on KHInsider
             search(data)
 
+
+
+if __name__ == "__main__": # Start: only executes when running script directly
+    CLI()
