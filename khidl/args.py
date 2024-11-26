@@ -103,6 +103,6 @@ def batchParser(args):
     return "batch", batchobj
 
 def searchParser(args):
-    finalquery = f"https://downloads.khinsider.com/search?search={' '.join(args.query)}&albumListSize=compact&type={args.song if args.song else ''}&sort=name"
+    finalquery = f"https://downloads.khinsider.com/search?search={' '.join(args.query)}&albumListSize=compact&type={'song' if args.song else ''}&sort=name"
 
     return "search", finalquery

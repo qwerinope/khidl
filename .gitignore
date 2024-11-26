@@ -3,6 +3,7 @@
 __pycache__/
 
 !.gitignore
+!develrun.py
 !khidl/
 !requirements.txt
 !pyproject.toml

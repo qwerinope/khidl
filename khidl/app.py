@@ -1,7 +1,7 @@
-from khidl.lib.args import getArguments
-from khidl.lib.soundtrack import Soundtrack
-from khidl.lib.downloader import preDownloadMusic, download
-from khidl.lib.search import search
+from .args import getArguments
+from .soundtrack import Soundtrack
+from .downloader import preDownloadMusic, download
+from .search import search
 
 class FormatNotAvailable(Exception):
     pass
