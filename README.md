@@ -1,5 +1,7 @@
 # KHIDL
 
+***NOTE: THIS PROJECT IS NOT AFFILIATED WITH KHINSIDER.***
+
 Download soundtracks from [KHInsider](https://downloads.khinsider.com)
 with a simple CLI.
 
@@ -85,3 +87,8 @@ For each soundtrack you can set the requested download format
 The example showcases all options and ways to configure it.
 There is a JSON schema included, please use it,
 as it will warn you before running the script if you have made an error.
+
+#### Special thanks
+
+Special thanks to KHInsider for the incredible database.  
+Special thanks to [obskyr's khinsider.py](https://github.com/obskyr/khinsider) project.
