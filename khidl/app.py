@@ -35,7 +35,5 @@ def CLI():
             # Data is a URL to the search page on KHInsider
             search(data)
 
-
-
 if __name__ == "__main__": # Start: only executes when running script directly
     CLI()
