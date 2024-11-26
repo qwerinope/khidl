@@ -45,6 +45,7 @@ def download(dlurls:List[str], outDir:str):
             desc=fname,
             total=total,
             unit='iB',
+            bar_format="{desc}: {percentage:3.0f}%|{bar}|{n_fmt}/{total_fmt} [{rate_fmt}]",
             unit_scale=True,
             unit_divisor=1024,
         ) as bar:
