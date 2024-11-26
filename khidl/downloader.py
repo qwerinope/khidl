@@ -53,4 +53,4 @@ def download(dlurls:List[str], outDir:str):
                 bar.update(size)
 
 class DLParseException(Exception):
-    pass
+    """This should NEVER EVER be triggered. If khinsider's website changes this might get set off but that's very unlikely"""

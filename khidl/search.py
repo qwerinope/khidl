@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 
 class SearchParsingError(Exception):
-    pass
+    """This should NEVER EVER be triggered. If khinsider's website changes this might get set off but that's very unlikely"""
 
 def search(url):
     r = requests.get(url)

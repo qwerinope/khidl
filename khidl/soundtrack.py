@@ -15,13 +15,21 @@ class Soundtrack:
     """
 
     def __init__(self, id:str):
-        self.id = id
-        self.url = self._getURL()
-        self.pageinstance = self._getPage()
-        self.name = self._getName()
-        self.images = self._getImages()
-        self.formats = self._getFormats()
-        self.tracks = self._getTracks()
+        try:
+            self.id = id
+            self.url = self._getURL()
+            self.pageinstance = self._getPage()
+            self.name = self._getName()
+            self.images = self._getImages()
+            self.formats = self._getFormats()
+            self.tracks = self._getTracks()
+        except OSTParsingError:
+            print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues")
+            exit(1)
+        except OSTNotFound as e:
+            print(e)
+            self.id = None
+            return
 
     def _getURL(self):
         return f'{BASEURL}/game-soundtracks/album/{self.id}'
@@ -47,7 +55,7 @@ class Soundtrack:
             raise OSTParsingError
 
         if ostname == "Ooops!":
-            raise OSTNotFound
+            raise OSTNotFound(self)
 
         return ostname
 
@@ -88,7 +96,12 @@ class Soundtrack:
         return trackURLs
 
 class OSTParsingError(Exception):
-    pass
+    """This should NEVER EVER be triggered. If khinsider's website changes this might get set off but that's very unlikely"""
 
 class OSTNotFound(Exception):
-    pass
+    def __init__(self, soundtrack, *args):
+        super().__init__(*args)
+        self.message = f"{soundtrack.id} Not found. Please make sure you correctly set the ID"
+
+    def __str__(self):
+        return self.message
