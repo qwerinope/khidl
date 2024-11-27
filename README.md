@@ -7,12 +7,14 @@ with a simple CLI.
 
 ## Installing
 
-Download the latest `.whl` file from [here](https://github.com/qweri0p/khidl/releases).
-Then run:
+Download the latest version from PyPi using pip with the following command.
 
 ```sh
-pip install khidl.whl
+pip install khinsider-dl
 ```
+
+You can also download the .whl file from the github releases [here](https://github.com/qweri0p/khidl/releases)
+and install it with `pip install`.
 
 ## Usage
 
