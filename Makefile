@@ -2,7 +2,7 @@ build:
 	python -m build --wheel --no-isolation
 
 clean:
-	rm -rv dist khidl.egg-info build
+	rm -rv dist khinsider_dl.egg-info build
 
 devbuild:
 	make build
