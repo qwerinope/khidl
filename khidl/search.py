@@ -17,7 +17,7 @@ def search(url):
     table.align = 'l' # Table align left
     table.field_names = ["Soundtrack", "ID", "Year"]
 
-    for index, ost in enumerate(parser.find_all('tr')):
+    for index, ost in enumerate(albumlist.find_all('tr')):
         if index == 0:
             continue
 
