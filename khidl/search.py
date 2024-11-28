@@ -5,13 +5,17 @@ import requests
 class SearchParsingError(Exception):
     """This should NEVER EVER be triggered. If khinsider's website changes this might get set off but that's very unlikely"""
 
+class SearchNoResults(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
 def search(url):
     r = requests.get(url)
     parser = BeautifulSoup(r.text, 'html.parser')
     albumlist = parser.select_one('.albumList')
 
     if not albumlist:
-        raise SearchParsingError
+        raise SearchNoResults
 
     table = PrettyTable()
     table.align = 'l' # Table align left

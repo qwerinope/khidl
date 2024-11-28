@@ -1,5 +1,5 @@
 BASEURL="https://downloads.khinsider.com"
-import requests, bs4
+import requests, bs4, sys
 
 class Soundtrack:
     """ Representative of a soundtrack on KHinsider
@@ -24,10 +24,10 @@ class Soundtrack:
             self.formats = self._getFormats()
             self.tracks = self._getTracks()
         except OSTParsingError:
-            print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues")
+            print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues", file=sys.stderr)
             exit(1)
         except OSTNotFound as e:
-            print(e)
+            print(e, file=sys.stderr)
             self.id = None
             return
 

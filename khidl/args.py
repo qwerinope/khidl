@@ -76,6 +76,7 @@ def batchParser(args):
         validate(instance=cfg, schema=schema)
     except ValidationError:
         print(f"The '{cfgfile}' is incorrectly written. Make sure you comply with the JSON schema provided.", file=sys.stderr)
+        exit(1)
 
     batchobj = []
     for item in cfg['soundtracks']:

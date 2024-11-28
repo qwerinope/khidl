@@ -1,7 +1,8 @@
+import sys
 from .args import getArguments
 from .soundtrack import Soundtrack
 from .downloader import preDownloadMusic, download, DLParseException
-from .search import search, SearchParsingError
+from .search import search, SearchParsingError, SearchNoResults
 
 class FormatNotAvailable(Exception):
     """The format the user wanted is not provided by KHInsider"""
@@ -38,10 +39,10 @@ def CLI():
                 if status == "err":
                     exit(1)
             except FormatNotAvailable as e:
-                print(e)
+                print(e, file=sys.stderr)
                 exit(1)
             except DLParseException:
-                print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues")
+                print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues", file=sys.stderr)
                 exit(1)
 
         case "batch":
@@ -57,7 +58,7 @@ def CLI():
                     print(e)
                     continue
                 except DLParseException:
-                    print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues")
+                    print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues", file=sys.stderr)
                     continue
 
         case "search":
@@ -65,5 +66,8 @@ def CLI():
             try:
                 search(data)
             except SearchParsingError:
-                print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues")
+                print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues", file=sys.stderr)
+                exit(1)
+            except SearchNoResults:
+                print("No soundtracks matched the requests.", file=sys.stderr)
                 exit(1)
