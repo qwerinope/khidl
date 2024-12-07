@@ -3,7 +3,7 @@ from pathlib import Path
 from jsonschema import validate, ValidationError
 
 EXAMPLECONFIG = {
-    "$schema": "https://raw.githubusercontent.com/qweri0p/khdl/refs/heads/main/schema.json",
+    "$schema": "https://raw.githubusercontent.com/qweri0p/khidl/refs/heads/main/schema.json",
     "defaultFormat": "mp3",
     "soundtracks": [
         {
@@ -69,7 +69,7 @@ def batchParser(args):
         print(f"The '{cfgfile}' file has a JSON syntax error.", file=sys.stderr)
         exit(1)
 
-    r = requests.get("https://raw.githubusercontent.com/qweri0p/khdl/refs/heads/main/schema.json")
+    r = requests.get("https://raw.githubusercontent.com/qweri0p/khidl/refs/heads/main/schema.json")
     schema = json.loads(r.text)
 
     try:
