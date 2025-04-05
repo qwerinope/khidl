@@ -3,7 +3,7 @@ from pathlib import Path
 from jsonschema import validate, ValidationError
 
 EXAMPLECONFIG = {
-    "$schema": "https://raw.githubusercontent.com/qweri0p/khidl/refs/heads/main/schema.json",
+    "$schema": "https://raw.githubusercontent.com/qwerinope/khidl/refs/heads/main/schema.json",
     "defaultFormat": "mp3",
     "soundtracks": [
         {

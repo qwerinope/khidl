@@ -13,7 +13,7 @@ Download the latest version from PyPi using pip with the following command.
 pip install khinsider-dl
 ```
 
-You can also download the .whl file from the github releases [here](https://github.com/qweri0p/khidl/releases)
+You can also download the .whl file from the github releases [here](https://github.com/qwerinope/khidl/releases)
 and install it with `pip install`.
 
 ## Usage

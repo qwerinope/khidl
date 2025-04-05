@@ -42,7 +42,7 @@ def CLI():
                 print(e, file=sys.stderr)
                 exit(1)
             except DLParseException:
-                print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues", file=sys.stderr)
+                print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
                 exit(1)
 
         case "batch":
@@ -58,7 +58,7 @@ def CLI():
                     print(e)
                     continue
                 except DLParseException:
-                    print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues", file=sys.stderr)
+                    print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
                     continue
 
         case "search":
@@ -66,7 +66,7 @@ def CLI():
             try:
                 search(data)
             except SearchParsingError:
-                print("An error occured!\nPlease leave an issue at https://github.com/qweri0p/khidl/issues", file=sys.stderr)
+                print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
                 exit(1)
             except SearchNoResults:
                 print("No soundtracks matched the requests.", file=sys.stderr)
