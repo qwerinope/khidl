@@ -10,7 +10,13 @@ class SearchNoResults(Exception):
         super().__init__(*args)
 
 def search(url):
-    r = requests.get(url)
+    headers = {"User-Agent": "Mozilla/5.0",
+        "Accept": "text/html,application/xhtml+xml",
+        "Accept-Encoding": "identity",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Sec-Fetch-Site":"same-site"}
+
+    r = requests.get(url, headers=headers)
     parser = BeautifulSoup(r.text, 'html.parser')
     albumlist = parser.select_one('.albumList')
 

@@ -12,7 +12,12 @@ def preDownloadMusic(soundtrack:Soundtrack, format:Literal['mp3', 'flac', 'm4a']
 
     for index, track in enumerate(soundtrack.tracks):
         print("\rPreparing download: {}/{}".format(index+1, len(soundtrack.tracks)), end="")
-        r = requests.get(track)
+        headers = {"User-Agent": "Mozilla/5.0",
+            "Accept": "text/html,application/xhtml+xml",
+            "Accept-Encoding": "identity",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Sec-Fetch-Site":"same-site"}
+        r = requests.get(track, headers=headers)
         parser = BeautifulSoup(r.text, 'html.parser')
         dllink = parser.select_one('.songDownloadLink')
 

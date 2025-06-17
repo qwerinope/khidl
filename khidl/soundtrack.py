@@ -35,7 +35,13 @@ class Soundtrack:
         return f'{BASEURL}/game-soundtracks/album/{self.id}'
 
     def _getPage(self):
-        raw = requests.get(self.url)
+        headers = {"User-Agent": "Mozilla/5.0",
+        "Accept": "text/html,application/xhtml+xml",
+        "Accept-Encoding": "identity",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Sec-Fetch-Site":"same-site"}
+        
+        raw = requests.get(self.url, headers=headers)
         firstparser = bs4.BeautifulSoup(raw.text, 'html.parser')
         
         if firstparser:
@@ -48,7 +54,6 @@ class Soundtrack:
     def _getName(self):
         # NOTE: This could also be done by using the information txt file. However, i don't give a shit. Maybe later I will.
         parser = self.pageinstance
-
         if parser.h2 and parser.h2.string:
             ostname = parser.h2.string
         else:
