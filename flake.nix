@@ -3,20 +3,22 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
     pyproject-nix = {
       url = "github:nix-community/pyproject.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, pyproject-nix }:
-    let
-      project = pyproject-nix.lib.project.loadPyproject { projectRoot = ./.; };
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      python = pkgs.python3;
-    in {
-      packages.x86_64-linux.default =
-        let attrs = project.renderers.buildPythonPackage { inherit python; };
-        in python.pkgs.buildPythonApplication attrs;
-    };
+  outputs = { self, nixpkgs, pyproject-nix, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        project =
+          pyproject-nix.lib.project.loadPyproject { projectRoot = ./.; };
+        pkgs = import nixpkgs { inherit system; };
+        python = pkgs.python3;
+        attrs = project.renderers.buildPythonPackage { inherit python; };
+      in {
+        packages = { default = python.pkgs.buildPythonApplication attrs; };
+      });
 }
