@@ -29,13 +29,21 @@ def preDownloadMusic(soundtrack:Soundtrack, format:Literal['mp3', 'flac', 'm4a']
         if not dlanchor:
             raise DLParseException
 
-        originURL = dlanchor.get('href')
+        originURL = dlanchor.get('href').__str__()
 
         if not originURL:
             raise DLParseException
 
         base = str(originURL).rsplit(str('/'), 1)[0]
-        urls.append(f'{base}/{unquote(track.rsplit(str('/'), 1)[-1].rsplit(str('.'), 1)[0])}.{format}')
+        trackname = unquote(originURL.rsplit(str('/'), 1)[-1].rsplit(str('.'), 1)[0])
+        url = f'{base}/{trackname}.{format}'
+        exists = requests.head(url)
+        if (exists.status_code != 200):
+            urls.append(f'{base}/{trackname}.mp3')
+            print(f"\rCannot find track {index} '{trackname}' in {format} format. Downloading the mp3 version instead.")
+        else:
+            urls.append(url)
+
 
     return urls
 

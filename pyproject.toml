@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "khinsider-dl"
-version = "1.2.4"
+version = "1.2.5"
+license = "MIT"
 readme = "README.md"
 description = "Download soundtracks from downloads.khinsider.com with a useful and quick CLI"
-authors = [{ name = "qweriop" }]
+authors = [{ name = "qwerinope" }]
 dependencies = [
 	"beautifulsoup4",
 	"requests",
@@ -15,6 +16,11 @@ dependencies = [
 	"jsonschema",
 	"prettytable",
 ]
+
+[project.urls]
+Homepage = "https://github.com/qwerinope/khidl"
+Issues = "https://github.com/qwerinope/khidl/issues"
+Repository = "https://github.com/qwerinope/khidl.git"
 
 [project.scripts]
 khidl = "khidl.app:CLI"

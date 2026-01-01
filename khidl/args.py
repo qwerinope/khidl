@@ -51,7 +51,7 @@ def downloadParser(args):
     else:
         ostid = args.request[0]
 
-    return "download" , (ostid, args.format, args.output, args.no_images)
+    return "download" , (ostid, args.format, args.output, not args.no_images) # not no_images = images yes or no.
 
 def batchParser(args):
     cfgfile = Path('soundtracks.json')
