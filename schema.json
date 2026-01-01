@@ -6,11 +6,6 @@
     "properties": {
         "defaultFormat": {
             "type": "string",
-            "enum": [
-                "mp3",
-                "flac",
-                "m4a"
-            ],
             "description": "This format will be used when no format is specified for a soundtrack"
         },
         "soundtracks": {
@@ -33,11 +28,6 @@
                             },
                             "format": {
                                 "type": "string",
-                                "enum": [
-                                    "mp3",
-                                    "flac",
-                                    "m4a"
-                                ],
                                 "description": "Requested format of soundtrack"
                             },
                             "output": {
@@ -56,7 +46,6 @@
         }
     },
     "required": [
-        "defaultFormat",
         "soundtracks"
     ]
 }

@@ -2,11 +2,11 @@ from urllib.parse import unquote
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
-from typing import List, Literal
+from typing import List
 from tqdm import tqdm
 from .soundtrack import Soundtrack
 
-def preDownloadMusic(soundtrack:Soundtrack, format:Literal['mp3', 'flac', 'm4a']):
+def preDownloadMusic(soundtrack:Soundtrack, format:str):
     print(f"Downloading '{soundtrack.name}'...")
     urls = []
 
@@ -40,7 +40,7 @@ def preDownloadMusic(soundtrack:Soundtrack, format:Literal['mp3', 'flac', 'm4a']
         exists = requests.head(url)
         if (exists.status_code != 200):
             urls.append(f'{base}/{trackname}.mp3')
-            print(f"\rCannot find track {index} '{trackname}' in {format} format. Downloading the mp3 version instead.")
+            print(f"\rCannot find track {index+1} '{trackname}' in {format} format. Downloading the mp3 version instead.")
         else:
             urls.append(url)
 

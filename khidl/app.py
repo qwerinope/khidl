@@ -8,7 +8,7 @@ class FormatNotAvailable(Exception):
     """The format the user wanted is not provided by KHInsider"""
     def __init__(self, soundtrack, wantedFormat, *args):
         super().__init__(*args)
-        self.message = f"{wantedFormat} isn't available on {soundtrack.name}. Please try a different format"
+        self.message = f"{wantedFormat} isn't available on {soundtrack.name}. Options: '{'\' or \''.join(soundtrack.formats)}'"
     def __str__(self):
         return self.message
 

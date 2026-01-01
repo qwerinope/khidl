@@ -81,7 +81,7 @@ class Soundtrack:
         formats = [
             col.string.lower()
             for col in columns
-            if col.string and col.string.lower() in {'mp3', 'm4a', 'flac'}
+            if col.string and col.string.lower() not in {'#', 'song name'}
         ]
         return formats
 

@@ -36,11 +36,12 @@ If the second positional command is left empty it will download the soundtrack
 to a new directory named after the requested soundtrack.
 
 The `--format` flag can be used to specify the requested music format.
-It is constrained to mp3, flac and m4a.
+All soundtracks are available in mp3 format.
+Most soundtracks have other optional formats, like flac or m4a.
 If a soundtrack is unavailable in the requested format,
-the program will stop and notify the user.
+the program will stop and notify the user about available formats.
 
-the `--no-images` argument makes sure `khidl` doesn't download images
+The `--no-images` argument makes sure `khidl` doesn't download images
 belonging to the soundtrack.
 
 For more detail please read the help page:
@@ -83,12 +84,16 @@ khidl batch --init
 
 This creats a `soundtrack.json`. In this file,
 you can specify multiple soundtracks to be downloaded.
-For each soundtrack you can set the requested download format
-(either mp3, flac or m4a).
+For each soundtrack you can set the requested download format.
 
 The example showcases all options and ways to configure it.
 There is a JSON schema included, please use it,
 as it will warn you before running the script if you have made an error.
+
+The script will validate the json before parsing it.
+This behavior can be stopped by using `-f`/`--force`.
+This is intended for testing and development only.
+If the formatting is wrong the program will crash.
 
 #### Special thanks
 

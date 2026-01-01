@@ -30,12 +30,13 @@ def getArguments():
     downloadcmd.set_defaults(func=downloadParser)
     downloadcmd.add_argument("request", help="the soundtrack name or url the user wishes to download", nargs=1, type=str)
     downloadcmd.add_argument("output", help="store the resulting music in a specified directory", default=None, nargs='?', type=str)
-    downloadcmd.add_argument("-f", "--format", help="the requested audio format, can be 'mp3', 'flac' or 'm4a'", type=str, choices=['mp3', 'flac', 'm4a'], default='mp3', nargs='?')
+    downloadcmd.add_argument("-f", "--format", help="the requested audio format, usually 'mp3', 'flac' or 'm4a'", type=str, default='mp3', nargs='?')
     downloadcmd.add_argument("--no-images", help="don't download the images on the specific soundtrack", action='store_true', default=False)
 
     jsoncmd = subparser.add_parser('batch', help="download multiple pre-defined soundtracks", description="download multiple soundtracks specified in a configuration file")
     jsoncmd.set_defaults(func=batchParser)
     jsoncmd.add_argument('-i', '--init', help="create a default configuration for batch downloading", action='store_true', default=False)
+    jsoncmd.add_argument('-f', '--force', help="ignore the json schema and try to parse the json anyways", action='store_true', default=False)
 
     searchcmd = subparser.add_parser('search', help="search KHInsider for soundtracks", description="use the search function on KHInsider and list all found soundtracks")
     searchcmd.set_defaults(func=searchParser)
@@ -63,20 +64,22 @@ def batchParser(args):
     if not cfgfile.exists():
         print(f"There is no configuration at '{cfgfile}'.\nPlease create a config using the '--init' argument, then modify it.", file=sys.stderr)
         exit(1)
+
     try:
         cfg = json.loads(cfgfile.read_text())
     except json.JSONDecodeError:
         print(f"The '{cfgfile}' file has a JSON syntax error.", file=sys.stderr)
         exit(1)
 
-    r = requests.get("https://raw.githubusercontent.com/qwerinope/khidl/refs/heads/main/schema.json")
-    schema = json.loads(r.text)
+    if not args.force:
+        r = requests.get("https://raw.githubusercontent.com/qwerinope/khidl/refs/heads/main/schema.json")
+        schema = json.loads(r.text)
 
-    try:
-        validate(instance=cfg, schema=schema)
-    except ValidationError:
-        print(f"The '{cfgfile}' is incorrectly written. Make sure you comply with the JSON schema provided.", file=sys.stderr)
-        exit(1)
+        try:
+            validate(instance=cfg, schema=schema)
+        except ValidationError:
+            print(f"The '{cfgfile}' is incorrectly written. Make sure you comply with the JSON schema provided.", file=sys.stderr)
+            exit(1)
 
     batchobj = []
     for item in cfg['soundtracks']:
@@ -88,7 +91,7 @@ def batchParser(args):
         if isinstance(item, dict):
             batchobj.append((
                 soundtrack,
-                item.get("format", cfg["defaultFormat"]),
+                item.get("format", cfg.get("defaultFormat", "mp3")),
                 item.get("output", None),
                 item.get("images", True)
             ))
@@ -96,7 +99,7 @@ def batchParser(args):
         elif isinstance(item, str): # This executes if the soundtrack is noted without object
             batchobj.append((
                 soundtrack,
-                cfg["defaultFormat"],
+                cfg.get("defaultFormat", "mp3"),
                 None,
                 True
             ))
