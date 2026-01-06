@@ -30,7 +30,7 @@ def getArguments():
     downloadcmd.set_defaults(func=downloadParser)
     downloadcmd.add_argument("request", help="the soundtrack name or url the user wishes to download", nargs=1, type=str)
     downloadcmd.add_argument("output", help="store the resulting music in a specified directory", default=None, nargs='?', type=str)
-    downloadcmd.add_argument("-f", "--format", help="the requested audio format, usually 'mp3', 'flac' or 'm4a'", type=str, default='mp3', nargs='?')
+    downloadcmd.add_argument("-f", "--format", help="the requested audio format, usually 'mp3', 'flac' or 'm4a'. 'nomusic' to download no music", type=str, default='mp3', nargs='?')
     downloadcmd.add_argument("--no-images", help="don't download the images on the specific soundtrack", action='store_true', default=False)
 
     jsoncmd = subparser.add_parser('batch', help="download multiple pre-defined soundtracks", description="download multiple soundtracks specified in a configuration file")

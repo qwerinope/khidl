@@ -40,9 +40,11 @@ All soundtracks are available in mp3 format.
 Most soundtracks have other optional formats, like flac or m4a.
 If a soundtrack is unavailable in the requested format,
 the program will stop and notify the user about available formats.
+If the user specifies the format as `nomusic`, the program will not download music, only images.
 
 The `--no-images` argument makes sure `khidl` doesn't download images
 belonging to the soundtrack.
+
 
 For more detail please read the help page:
 

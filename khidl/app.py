@@ -13,18 +13,29 @@ class FormatNotAvailable(Exception):
         return self.message
 
 def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
+    if (not getImages and wantedFormat == "nomusic"):
+        print("Cannot download nothing", file=sys.stderr)
+        return 'err'
+
     ost = Soundtrack(soundtrackId)
 
     if ost.id == None:
         return 'err'
 
-    if wantedFormat not in ost.formats:
-        raise FormatNotAvailable(ost, wantedFormat)
+    filelist = []
 
-    filelist = preDownloadMusic(ost, wantedFormat)
+    print(f"Downloading '{ost.name}'...")
+
+    if wantedFormat != "nomusic":
+        if wantedFormat not in ost.formats:
+            raise FormatNotAvailable(ost, wantedFormat)
+
+        filelist = preDownloadMusic(ost, wantedFormat)
+
     outputDir = outDir if outDir else ost.name
     if getImages:
         filelist += ost.images
+
     download(filelist, outputDir)
     print(f"Downloaded '{ost.name}' to '{outputDir}'")
     return 'ok'

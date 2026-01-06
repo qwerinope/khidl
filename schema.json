@@ -28,7 +28,7 @@
                             },
                             "format": {
                                 "type": "string",
-                                "description": "Requested format of soundtrack"
+                                "description": "Requested format of soundtrack. 'nomusic' downloads no music"
                             },
                             "output": {
                                 "type": "string",

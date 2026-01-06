@@ -7,7 +7,6 @@ from tqdm import tqdm
 from .soundtrack import Soundtrack
 
 def preDownloadMusic(soundtrack:Soundtrack, format:str):
-    print(f"Downloading '{soundtrack.name}'...")
     urls = []
 
     for index, track in enumerate(soundtrack.tracks):
