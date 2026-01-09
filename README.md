@@ -16,6 +16,8 @@ pip install khinsider-dl
 You can also download the .whl file from the github releases [here](https://github.com/qwerinope/khidl/releases)
 and install it with `pip install`.
 
+There's an AUR package available too: [`python-khidl`](https://aur.archlinux.org/packages/python-khidl)
+
 ## Usage
 
 ### Download
