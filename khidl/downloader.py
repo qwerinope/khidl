@@ -1,4 +1,6 @@
 from urllib.parse import unquote
+import re
+import os
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
@@ -34,12 +36,12 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
             raise DLParseException
 
         base = str(originURL).rsplit(str('/'), 1)[0]
-        trackname = unquote(originURL.rsplit(str('/'), 1)[-1].rsplit(str('.'), 1)[0])
+        trackname = originURL.rsplit(str('/'), 1)[-1].rsplit(str('.'), 1)[0]
         url = f'{base}/{trackname}.{format}'
         exists = requests.head(url)
         if (exists.status_code != 200):
             urls.append(f'{base}/{trackname}.mp3')
-            print(f"\rCannot find track {index+1} '{trackname}' in {format} format. Downloading the mp3 version instead.")
+            print(f"\rCannot find track {index+1} '{unquote(trackname)}' in {format} format. Downloading the mp3 version instead.")
         else:
             urls.append(url)
 
@@ -51,6 +53,10 @@ def download(dlurls:List[str], outDir:str):
     output.mkdir(exist_ok=True)
     for url in dlurls:
         fname = unquote(url.rsplit(str('/'), 1)[-1])
+        
+        if os.name == "nt":
+            fname = re.sub(r'[<>:"/\\|?*\x00-\x1F]', "_", fname)
+
         resp = requests.get(url, stream=True)
         total = int(resp.headers.get('content-length', 0))
         with open(f'{output}/{fname}', 'wb') as file, tqdm(

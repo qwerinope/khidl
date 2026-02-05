@@ -4,7 +4,5 @@ build:
 clean:
 	rm -rv dist khinsider_dl.egg-info build
 
-devbuild:
-	make build
+devbuild: build
 	pip install dist/*.whl --force-reinstall
-	make clean

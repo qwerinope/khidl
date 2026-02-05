@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "khinsider-dl"
-version = "1.3.1"
+version = "1.3.2"
 license = "MIT"
 readme = "README.md"
 description = "Download soundtracks from downloads.khinsider.com with a useful and quick CLI"
