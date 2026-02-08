@@ -48,14 +48,13 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
 
     return urls
 
-def download(dlurls:List[str], outDir:str):
+def download(dlurls:List[str], rawOutDir:str):
+    outDir = cleanPath(rawOutDir)
+    print(outDir)
     output = Path(outDir)
     output.mkdir(exist_ok=True)
     for url in dlurls:
-        fname = unquote(url.rsplit(str('/'), 1)[-1])
-        
-        if os.name == "nt":
-            fname = re.sub(r'[<>:"/\\|?*\x00-\x1F]', "_", fname)
+        fname = cleanPath(unquote(url.rsplit(str('/'), 1)[-1]))
 
         resp = requests.get(url, stream=True)
         total = int(resp.headers.get('content-length', 0))
@@ -73,3 +72,12 @@ def download(dlurls:List[str], outDir:str):
 
 class DLParseException(Exception):
     """This should NEVER EVER be triggered. If khinsider's website changes this might get set off but that's very unlikely"""
+
+
+"""removes illegal characters from path and filenames"""
+def cleanPath(path:str) -> str:
+    match os.name:
+        case 'nt':
+            return re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", path)
+        case _:
+            return re.sub(r'[/]', "_", path)
