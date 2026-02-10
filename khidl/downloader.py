@@ -50,7 +50,6 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
 
 def download(dlurls:List[str], rawOutDir:str):
     outDir = cleanPath(rawOutDir)
-    print(outDir)
     output = Path(outDir)
     output.mkdir(exist_ok=True)
     for url in dlurls:
@@ -78,6 +77,7 @@ class DLParseException(Exception):
 def cleanPath(path:str) -> str:
     match os.name:
         case 'nt':
+            # eww 🤮🤮🤮🤮
             return re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", path)
         case _:
             return re.sub(r'[/]', "_", path)
