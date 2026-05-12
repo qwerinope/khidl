@@ -15,7 +15,7 @@ dependencies = [
 	"tqdm",
 	"jsonschema",
 	"prettytable",
-	"curl-cffi",
+	"curl-cffi"
 ]
 
 [project.urls]
