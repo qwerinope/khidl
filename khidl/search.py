@@ -1,6 +1,6 @@
 from prettytable import PrettyTable
 from bs4 import BeautifulSoup
-import requests
+from curl_cffi import requests
 
 class SearchParsingError(Exception):
     """This should NEVER EVER be triggered. If khinsider's website changes this might get set off but that's very unlikely"""
@@ -16,7 +16,7 @@ def search(url):
         "Accept-Language": "en-US,en;q=0.9",
         "Sec-Fetch-Site":"same-site"}
 
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, impersonate="chrome")
     parser = BeautifulSoup(r.text, 'html.parser')
     albumlist = parser.select_one('.albumList')
 

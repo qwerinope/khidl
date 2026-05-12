@@ -3,3 +3,4 @@ requests
 tqdm
 jsonschema
 prettytable
+curl_cffi

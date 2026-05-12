@@ -1,7 +1,7 @@
 from urllib.parse import unquote
 import re
 import os
-import requests
+from curl_cffi import requests #Changed from import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
 from typing import List
@@ -18,7 +18,7 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
             "Accept-Encoding": "identity",
             "Accept-Language": "en-US,en;q=0.9",
             "Sec-Fetch-Site":"same-site"}
-        r = requests.get(track, headers=headers)
+        r = requests.get(track, impersonate="chrome", stream=True)
         parser = BeautifulSoup(r.text, 'html.parser')
         dllink = parser.select_one('.songDownloadLink')
 
@@ -55,7 +55,7 @@ def download(dlurls:List[str], rawOutDir:str):
     for url in dlurls:
         fname = cleanPath(unquote(url.rsplit(str('/'), 1)[-1]))
 
-        resp = requests.get(url, stream=True)
+        resp = requests.get(url, impersonate="chrome", stream=True)
         total = int(resp.headers.get('content-length', 0))
         with open(f'{output}/{fname}', 'wb') as file, tqdm(
             desc=fname,

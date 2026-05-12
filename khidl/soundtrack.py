@@ -1,5 +1,6 @@
 BASEURL="https://downloads.khinsider.com"
-import requests, bs4, sys
+from curl_cuffi import requests #changed from 'import requests'
+import bs4, sys
 
 class Soundtrack:
     """ Representative of a soundtrack on KHinsider
@@ -41,7 +42,7 @@ class Soundtrack:
         "Accept-Language": "en-US,en;q=0.9",
         "Sec-Fetch-Site":"same-site"}
         
-        raw = requests.get(self.url, headers=headers)
+        raw = requests.get(self.url, impersonate="chrome")
         firstparser = bs4.BeautifulSoup(raw.text, 'html.parser')
         
         if firstparser:
