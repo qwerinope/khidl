@@ -19,6 +19,9 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
             "Accept-Language": "en-US,en;q=0.9",
             "Sec-Fetch-Site":"same-site"}
         r = requests.get(track, impersonate="chrome", stream=True)
+
+        if r.status_code != 200:
+            print(f"Debug: Status Code {r.status_code}")
         parser = BeautifulSoup(r.text, 'html.parser')
         dllink = parser.select_one('.songDownloadLink')
 
