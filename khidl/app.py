@@ -1,4 +1,5 @@
 import sys
+import traceback
 from .args import getArguments
 from .soundtrack import Soundtrack
 from .downloader import preDownloadMusic, download, DLParseException
@@ -54,6 +55,7 @@ def CLI():
                 exit(1)
             except DLParseException:
                 print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
+                traceback.print_exc()
                 exit(1)
 
         case "batch":
