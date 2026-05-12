@@ -18,10 +18,10 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
             "Accept-Encoding": "identity",
             "Accept-Language": "en-US,en;q=0.9",
             "Sec-Fetch-Site":"same-site"}
-        r = requests.get(track, impersonate="chrome", stream=True)
+        r = requests.get(track, impersonate="chrome")
 
         if r.status_code != 200:
-            print(f"Debug: Status Code {r.status_code}")
+            print(f"Debug: Status Code: {r.status_code}")
         parser = BeautifulSoup(r.text, 'html.parser')
         dllink = parser.select_one('.songDownloadLink')
 
@@ -41,7 +41,7 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
         base = str(originURL).rsplit(str('/'), 1)[0]
         trackname = originURL.rsplit(str('/'), 1)[-1].rsplit(str('.'), 1)[0]
         url = f'{base}/{trackname}.{format}'
-        exists = requests.head(url)
+        exists = requests.head(url, impersonate="chrome")
         if (exists.status_code != 200):
             urls.append(f'{base}/{trackname}.mp3')
             print(f"\rCannot find track {index+1} '{unquote(trackname)}' in {format} format. Downloading the mp3 version instead.")
