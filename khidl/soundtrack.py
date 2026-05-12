@@ -1,5 +1,5 @@
 BASEURL="https://downloads.khinsider.com"
-from curl_cuffi import requests #changed from 'import requests'
+from curl_cffi import requests #changed from 'import requests'
 import bs4, sys
 
 class Soundtrack:
