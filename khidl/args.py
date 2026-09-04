@@ -38,6 +38,7 @@ def getArguments():
 
     jsoncmd = subparser.add_parser('batch', help="download multiple pre-defined soundtracks", description="download multiple soundtracks specified in a configuration file")
     jsoncmd.set_defaults(func=batchParser)
+    jsoncmd.add_argument('jsonfile', help="json file containing soundtracks", default="soundtracks.json", nargs='?', type=str)
     jsoncmd.add_argument('-i', '--init', help="create a default configuration for batch downloading", action='store_true', default=False)
     jsoncmd.add_argument('-f', '--force', help="ignore the json schema and try to parse the json anyways", action='store_true', default=False)
 
@@ -45,6 +46,7 @@ def getArguments():
     searchcmd.set_defaults(func=searchParser)
     searchcmd.add_argument('query', help="search query", nargs='+', type=str)
     searchcmd.add_argument('--song', help="search for soundtracks containing a specific song", action='store_true', default=False)
+    searchcmd.add_argument('-j', '--json', help="save the result of the search into a json file", nargs='?', type=str)
 
     args = parser.parse_args()
     return args.func(args)
@@ -58,9 +60,13 @@ def downloadParser(args):
     return "download" , (ostid, args.format, args.output, not args.no_images) # not no_images = images yes or no.
 
 def batchParser(args):
-    cfgfile = Path('soundtracks.json')
+    cfgfile = Path(args.jsonfile)
     if args.init:
-        cfgfile.write_text(json.dumps(EXAMPLECONFIG, indent=4))
+        if cfgfile.exists():
+            print(f"Cannot write base config to '{cfgfile}' as the file already exists", file=sys.stderr)
+            sys.exit(1)
+
+        cfgfile.write_text(json.dumps(EXAMPLECONFIG, indent=2))
         print(f"Written default config to '{cfgfile}'")
         sys.exit(0)
 
@@ -112,4 +118,4 @@ def batchParser(args):
 def searchParser(args):
     finalquery = f"https://downloads.khinsider.com/search?search={' '.join(args.query)}&albumListSize=compact&type={'song' if args.song else ''}&sort=name"
 
-    return "search", finalquery
+    return "search", (finalquery, args.json)

@@ -78,6 +78,15 @@ to download the ost.
 Note that searcing for a specific song is considerably slower,
 it can take about 10 seconds to show data.
 
+Using the `-j` (json) option will make the program write the search results to a new json file for use with the batch downloader.
+
+```sh
+khidl search -j ggxrd.json "guilty gear xrd"
+```
+
+This will create a new file `ggxrd.json` containing the search results from the query "guilty gear xrd".
+Searching for songs and saving them in json works the same.
+
 ### Batch
 
 To create the default configuration, run
@@ -86,13 +95,18 @@ To create the default configuration, run
 khidl batch --init
 ```
 
-This creats a `soundtrack.json`. In this file,
+This creats a `soundtracks.json`. In this file,
 you can specify multiple soundtracks to be downloaded.
 For each soundtrack you can set the requested download format.
 
 The example showcases all options and ways to configure it.
 There is a JSON schema included, please use it,
 as it will warn you before running the script if you have made an error.
+
+You can specify the name of a json file by putting it at the end of the command.
+When running `--init`, this will create the base configuration in a file with that name.
+When running normally, you can use this to specify the exact json file to be loaded.
+By default the script will create and use `soundtracks.json`
 
 The script will validate the json before parsing it.
 This behavior can be stopped by using `-f`/`--force`.

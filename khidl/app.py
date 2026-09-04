@@ -4,23 +4,27 @@ from .soundtrack import Soundtrack
 from .downloader import preDownloadMusic, download, DLParseException
 from .search import search, SearchParsingError, SearchNoResults
 
+
 class FormatNotAvailable(Exception):
     """The format the user wanted is not provided by KHInsider"""
+
     def __init__(self, soundtrack, wantedFormat, *args):
         super().__init__(*args)
         self.message = f"Format {wantedFormat} isn't available on {soundtrack.name}. Options: {', '.join(soundtrack.formats)}"
+
     def __str__(self):
         return self.message
 
+
 def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
-    if (not getImages and wantedFormat == "nomusic"):
+    if not getImages and wantedFormat == "nomusic":
         print("Cannot download nothing", file=sys.stderr)
-        return 'err'
+        return "err"
 
     ost = Soundtrack(soundtrackId)
 
     if ost.id == None:
-        return 'err'
+        return "err"
 
     filelist = []
 
@@ -38,7 +42,8 @@ def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
 
     download(filelist, outputDir)
     print(f"Downloaded '{ost.name}' to '{outputDir}'")
-    return 'ok'
+    return "ok"
+
 
 def CLI():
     command, data = getArguments()
@@ -53,12 +58,17 @@ def CLI():
                 print(e, file=sys.stderr)
                 sys.exit(1)
             except DLParseException:
-                print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
+                print(
+                    "An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
 
         case "batch":
             # The data array contains tuples that consist of: (soundtrackId, wantedFormat, outDir, getImages)
-            print(f"Succesfully parsed configuration.\nDownloading {len(data)} soundtracks.")
+            print(
+                f"Succesfully parsed configuration.\nDownloading {len(data)} soundtracks."
+            )
 
             for ost in data:
                 try:
@@ -69,15 +79,21 @@ def CLI():
                     print(e)
                     continue
                 except DLParseException:
-                    print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
+                    print(
+                        "An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues",
+                        file=sys.stderr,
+                    )
                     continue
 
         case "search":
-            # Data is a URL to the search page on KHInsider
+            # Data is a tuple with (query, jsonfilename(optional))
             try:
-                search(data)
+                search(*data)
             except SearchParsingError:
-                print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
+                print(
+                    "An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
             except SearchNoResults:
                 print("No soundtracks matched the requests.", file=sys.stderr)
