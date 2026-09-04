@@ -25,7 +25,7 @@ class Soundtrack:
             self.tracks = self._getTracks()
         except OSTParsingError:
             print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
-            exit(1)
+            sys.exit(1)
         except OSTNotFound as e:
             print(e, file=sys.stderr)
             self.id = None

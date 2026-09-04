@@ -1,51 +1,51 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema",
-    "type": "object",
-    "title": "Batch downloader config",
-    "description": "The configuration for the khdl batch download feature",
-    "properties": {
-        "defaultFormat": {
-            "type": "string",
-            "description": "This format will be used when no format is specified for a soundtrack"
-        },
-        "soundtracks": {
-            "type": "array",
-            "items": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "description": "URL or id of a soundtrack on KHInsider"
-                    },
-                    {
-                        "type": "object",
-                        "required": [
-                            "soundtrack"
-                        ],
-                        "properties": {
-                            "soundtrack": {
-                                "type": "string",
-                                "description": "URL or id of a soundtrack on KHInsider"
-                            },
-                            "format": {
-                                "type": "string",
-                                "description": "Requested format of soundtrack. 'nomusic' downloads no music"
-                            },
-                            "output": {
-                                "type": "string",
-                                "description": "Name of directory the soundtrack will be placed in"
-                            },
-                            "images": {
-                                "type": "boolean",
-                                "description": "Download images from khinsider along with the music or not"
-                            }
-                        }
-                    }
-                ]
-            },
-            "minItems": 1
-        }
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "khidl batch downloader config",
+  "description": "The configuration for the khidl batch download feature",
+  "properties": {
+    "defaultFormat": {
+      "type": "string",
+      "description": "This format will be used when no format is specified for a soundtrack"
     },
-    "required": [
-        "soundtracks"
-    ]
+    "soundtracks": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "description": "URL or id of a soundtrack on KHInsider. Will download the soundtrack a new directory with the name from KHInsider. Will download images. Format is the one specified in 'defaultFormat', with mp3 as a fallback."
+          },
+          {
+            "type": "object",
+            "required": [
+              "soundtrack"
+            ],
+            "properties": {
+              "soundtrack": {
+                "type": "string",
+                "description": "URL or id of a soundtrack on KHInsider"
+              },
+              "format": {
+                "type": "string",
+                "description": "Requested format of soundtrack. 'nomusic' downloads no music. When omitted will use the 'defaultFormat' value, with mp3 as fallback."
+              },
+              "output": {
+                "type": "string",
+                "description": "Name of directory the soundtrack will be placed in. If omitted the ouput will be the name of the soundtrack on KHInsider"
+              },
+              "images": {
+                "type": "boolean",
+                "description": "Download images from khinsider along with the music or not. Default true"
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "soundtracks"
+  ]
 }

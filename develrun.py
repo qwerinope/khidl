@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 # This is for development only
 import sys, re
 from khidl.app import CLI

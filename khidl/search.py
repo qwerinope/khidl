@@ -34,6 +34,6 @@ def search(url):
         anchors = ost.find_all('a')
         goodanchor = anchors[1]
 
-        table.add_row([goodanchor.get_text(), goodanchor.get('href').rsplit(str('/'),1)[-1], ost.select_one("td:last-of-type").get_text()])
+        table.add_row([goodanchor.get_text(), goodanchor.get('href').rsplit('/', 1)[-1], ost.select_one("td:last-of-type").get_text()])
 
     print(table)

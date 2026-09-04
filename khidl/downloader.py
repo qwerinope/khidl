@@ -4,7 +4,6 @@ import os
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
-from typing import List
 from tqdm import tqdm
 from .soundtrack import Soundtrack
 
@@ -12,7 +11,7 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
     urls = []
 
     for index, track in enumerate(soundtrack.tracks):
-        print("\rPreparing download: {}/{}".format(index+1, len(soundtrack.tracks)), end="")
+        print(f"\rPreparing download: {index+1}/{len(soundtrack.tracks)}", end="")
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.166 Safari/537.36",
             "Accept": "text/html,application/xhtml+xml",
             "Accept-Encoding": "identity",
@@ -35,8 +34,8 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
         if not originURL:
             raise DLParseException
 
-        base = str(originURL).rsplit(str('/'), 1)[0]
-        trackname = originURL.rsplit(str('/'), 1)[-1].rsplit(str('.'), 1)[0]
+        base = str(originURL).rsplit('/', 1)[0]
+        trackname = originURL.rsplit('/', 1)[-1].rsplit('.', 1)[0]
         url = f'{base}/{trackname}.{format}'
         exists = requests.head(url)
         if (exists.status_code != 200):
@@ -48,12 +47,12 @@ def preDownloadMusic(soundtrack:Soundtrack, format:str):
 
     return urls
 
-def download(dlurls:List[str], rawOutDir:str):
+def download(dlurls:list[str], rawOutDir:str):
     outDir = cleanPath(rawOutDir)
     output = Path(outDir)
     output.mkdir(exist_ok=True)
     for url in dlurls:
-        fname = cleanPath(unquote(url.rsplit(str('/'), 1)[-1]))
+        fname = cleanPath(unquote(url.rsplit('/', 1)[-1]))
 
         resp = requests.get(url, stream=True)
         total = int(resp.headers.get('content-length', 0))

@@ -1,4 +1,5 @@
 import argparse, json, sys, requests
+from importlib.metadata import version
 from pathlib import Path
 from jsonschema import validate, ValidationError
 
@@ -26,6 +27,8 @@ def getArguments():
     parser = argparse.ArgumentParser(description="Download videogame soundtracks from downloads.khinsider.com")
     subparser = parser.add_subparsers(dest="command", required=True)
 
+    parser.add_argument("-v","--version", action="version", version=f"%(prog)s {version('khinsider-dl')}")
+
     downloadcmd = subparser.add_parser('download', help="download a specific soundtrack")
     downloadcmd.set_defaults(func=downloadParser)
     downloadcmd.add_argument("request", help="the soundtrack name or url the user wishes to download", nargs=1, type=str)
@@ -48,7 +51,7 @@ def getArguments():
 
 def downloadParser(args):
     if 'downloads.khinsider.com' in  args.request[0]:
-        ostid = args.request[0].rsplit(str('/'), 1)[-1]
+        ostid = args.request[0].rsplit('/', 1)[-1]
     else:
         ostid = args.request[0]
 
@@ -59,17 +62,17 @@ def batchParser(args):
     if args.init:
         cfgfile.write_text(json.dumps(EXAMPLECONFIG, indent=4))
         print(f"Written default config to '{cfgfile}'")
-        exit(0)
+        sys.exit(0)
 
     if not cfgfile.exists():
         print(f"There is no configuration at '{cfgfile}'.\nPlease create a config using the '--init' argument, then modify it.", file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
     try:
         cfg = json.loads(cfgfile.read_text())
     except json.JSONDecodeError:
         print(f"The '{cfgfile}' file has a JSON syntax error.", file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
     if not args.force:
         r = requests.get("https://raw.githubusercontent.com/qwerinope/khidl/refs/heads/main/schema.json")
@@ -79,14 +82,14 @@ def batchParser(args):
             validate(instance=cfg, schema=schema)
         except ValidationError:
             print(f"The '{cfgfile}' is incorrectly written. Make sure you comply with the JSON schema provided.", file=sys.stderr)
-            exit(1)
+            sys.exit(1)
 
     batchobj = []
     for item in cfg['soundtracks']:
 
         soundtrack = item if isinstance(item, str) else item["soundtrack"]
         if 'downloads.khinsider.com' in soundtrack:
-            soundtrack = soundtrack.rsplit(str('/'), 1)[-1]
+            soundtrack = soundtrack.rsplit('/', 1)[-1]
 
         if isinstance(item, dict):
             batchobj.append((

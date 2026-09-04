@@ -48,13 +48,13 @@ def CLI():
             try:
                 status = downloadManager(*data)
                 if status == "err":
-                    exit(1)
+                    sys.exit(1)
             except FormatNotAvailable as e:
                 print(e, file=sys.stderr)
-                exit(1)
+                sys.exit(1)
             except DLParseException:
                 print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
-                exit(1)
+                sys.exit(1)
 
         case "batch":
             # The data array contains tuples that consist of: (soundtrackId, wantedFormat, outDir, getImages)
@@ -78,7 +78,7 @@ def CLI():
                 search(data)
             except SearchParsingError:
                 print("An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues", file=sys.stderr)
-                exit(1)
+                sys.exit(1)
             except SearchNoResults:
                 print("No soundtracks matched the requests.", file=sys.stderr)
-                exit(1)
+                sys.exit(1)
