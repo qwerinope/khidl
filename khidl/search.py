@@ -17,7 +17,7 @@ class SearchNoResults(Exception):
         super().__init__(*args)
 
 def search(url, jsonpath):
-    if json:
+    if jsonpath:
         jsonfile = Path(jsonpath)
         if jsonfile.exists():
             print(f"Cannot write to {jsonfile} because it already exists", file=sys.stderr)
