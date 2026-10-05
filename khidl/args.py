@@ -15,55 +15,135 @@ EXAMPLECONFIG = {
         {
             "soundtrack": "https://downloads.khinsider.com/game-soundtracks/album/plants-vs.-zombies",
             "format": "flac",
-            "images": False
+            "images": False,
         },
-        "super-mario-64-soundtrack"
-    ]
+        "super-mario-64-soundtrack",
+    ],
 }
+
 
 def getArguments():
     # This function passes execution over to a helper function that parses all arguments.
     # It always responds with 2 variables: a Literate of type "search", "batch" or "download" and something else.
-    parser = argparse.ArgumentParser(description="Download videogame soundtracks from downloads.khinsider.com")
+    parser = argparse.ArgumentParser(
+        description="Download videogame soundtracks from downloads.khinsider.com"
+    )
     subparser = parser.add_subparsers(dest="command", required=True)
 
-    parser.add_argument("-v","--version", action="version", version=f"%(prog)s {version('khinsider-dl')}")
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"%(prog)s {version('khinsider-dl')}",
+    )
 
-    downloadcmd = subparser.add_parser('download', help="download a specific soundtrack")
+    downloadcmd = subparser.add_parser(
+        "download", help="download a specific soundtrack"
+    )
     downloadcmd.set_defaults(func=downloadParser)
-    downloadcmd.add_argument("request", help="the soundtrack name or url the user wishes to download", nargs=1, type=str)
-    downloadcmd.add_argument("output", help="store the resulting music in a specified directory", default=None, nargs='?', type=str)
-    downloadcmd.add_argument("-f", "--format", help="the requested audio format, usually 'mp3', 'flac' or 'm4a'. 'nomusic' to download no music", type=str, default='mp3', nargs='?')
-    downloadcmd.add_argument("--no-images", help="don't download the images on the specific soundtrack", action='store_true', default=False)
+    downloadcmd.add_argument(
+        "request",
+        help="the soundtrack name or url the user wishes to download",
+        nargs=1,
+        type=str,
+    )
+    downloadcmd.add_argument(
+        "output",
+        help="store the resulting music in a specified directory",
+        default=None,
+        nargs="?",
+        type=str,
+    )
+    downloadcmd.add_argument(
+        "-f",
+        "--format",
+        help="the requested audio format, usually 'mp3', 'flac' or 'm4a'. 'nomusic' to download no music",
+        type=str,
+        default="mp3",
+        nargs="?",
+    )
+    downloadcmd.add_argument(
+        "--no-images",
+        help="don't download the images on the specific soundtrack",
+        action="store_true",
+        default=False,
+    )
 
-    jsoncmd = subparser.add_parser('batch', help="download multiple pre-defined soundtracks", description="download multiple soundtracks specified in a configuration file")
+    jsoncmd = subparser.add_parser(
+        "batch",
+        help="download multiple pre-defined soundtracks",
+        description="download multiple soundtracks specified in a configuration file",
+    )
     jsoncmd.set_defaults(func=batchParser)
-    jsoncmd.add_argument('jsonfile', help="json file containing soundtracks", default="soundtracks.json", nargs='?', type=str)
-    jsoncmd.add_argument('-i', '--init', help="create a default configuration for batch downloading", action='store_true', default=False)
-    jsoncmd.add_argument('-f', '--force', help="ignore the json schema and try to parse the json anyways", action='store_true', default=False)
+    jsoncmd.add_argument(
+        "jsonfile",
+        help="json file containing soundtracks",
+        default="soundtracks.json",
+        nargs="?",
+        type=str,
+    )
+    jsoncmd.add_argument(
+        "-i",
+        "--init",
+        help="create a default configuration for batch downloading",
+        action="store_true",
+        default=False,
+    )
+    jsoncmd.add_argument(
+        "-f",
+        "--force",
+        help="ignore the json schema and try to parse the json anyways",
+        action="store_true",
+        default=False,
+    )
 
-    searchcmd = subparser.add_parser('search', help="search KHInsider for soundtracks", description="use the search function on KHInsider and list all found soundtracks")
+    searchcmd = subparser.add_parser(
+        "search",
+        help="search KHInsider for soundtracks",
+        description="use the search function on KHInsider and list all found soundtracks",
+    )
     searchcmd.set_defaults(func=searchParser)
-    searchcmd.add_argument('query', help="search query", nargs='+', type=str)
-    searchcmd.add_argument('--song', help="search for soundtracks containing a specific song", action='store_true', default=False)
-    searchcmd.add_argument('-j', '--json', help="save the result of the search into a json file", nargs='?', type=str)
+    searchcmd.add_argument("query", help="search query", nargs="+", type=str)
+    searchcmd.add_argument(
+        "--song",
+        help="search for soundtracks containing a specific song",
+        action="store_true",
+        default=False,
+    )
+    searchcmd.add_argument(
+        "-j",
+        "--json",
+        help="save the result of the search into a json file",
+        nargs="?",
+        type=str,
+    )
 
     args = parser.parse_args()
     return args.func(args)
 
+
 def downloadParser(args):
-    if 'downloads.khinsider.com' in  args.request[0]:
-        ostid = args.request[0].rsplit('/', 1)[-1]
+    if "downloads.khinsider.com" in args.request[0]:
+        ostid = args.request[0].rsplit("/", 1)[-1]
     else:
         ostid = args.request[0]
 
-    return "download" , (ostid, args.format, args.output, not args.no_images) # not no_images = images yes or no.
+    return "download", (
+        ostid,
+        args.format,
+        args.output,
+        not args.no_images,
+    )  # not no_images = images yes or no.
+
 
 def batchParser(args):
     cfgfile = Path(args.jsonfile)
     if args.init:
         if cfgfile.exists():
-            print(f"Cannot write base config to '{cfgfile}' as the file already exists", file=sys.stderr)
+            print(
+                f"Cannot create configuration '{cfgfile}': the file already exists.",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
         cfgfile.write_text(json.dumps(EXAMPLECONFIG, indent=2))
@@ -71,49 +151,63 @@ def batchParser(args):
         sys.exit(0)
 
     if not cfgfile.exists():
-        print(f"There is no configuration at '{cfgfile}'.\nPlease create a config using the '--init' argument, then modify it.", file=sys.stderr)
+        print(
+            f"Configuration file '{cfgfile}' does not exist.\n"
+            "Run 'khidl batch --init' to create one, then modify it.",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     try:
         cfg = json.loads(cfgfile.read_text())
     except json.JSONDecodeError:
-        print(f"The '{cfgfile}' file has a JSON syntax error.", file=sys.stderr)
+        print(
+            f"Configuration file '{cfgfile}' contains invalid JSON. "
+            "Check commas, quotes, and brackets.",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     if not args.force:
-        r = requests.get("https://raw.githubusercontent.com/qwerinope/khidl/refs/heads/main/schema.json")
+        r = requests.get(
+            "https://raw.githubusercontent.com/qwerinope/khidl/refs/heads/main/schema.json"
+        )
         schema = json.loads(r.text)
 
         try:
             validate(instance=cfg, schema=schema)
-        except ValidationError:
-            print(f"The '{cfgfile}' is incorrectly written. Make sure you comply with the JSON schema provided.", file=sys.stderr)
+        except ValidationError as e:
+            location = ".".join(str(part) for part in e.absolute_path) or "root"
+            print(
+                f"Configuration file '{cfgfile}' is invalid at '{location}': "
+                f"{e.message}",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
     batchobj = []
-    for item in cfg['soundtracks']:
-
+    for item in cfg["soundtracks"]:
         soundtrack = item if isinstance(item, str) else item["soundtrack"]
-        if 'downloads.khinsider.com' in soundtrack:
-            soundtrack = soundtrack.rsplit('/', 1)[-1]
+        if "downloads.khinsider.com" in soundtrack:
+            soundtrack = soundtrack.rsplit("/", 1)[-1]
 
         if isinstance(item, dict):
-            batchobj.append((
-                soundtrack,
-                item.get("format", cfg.get("defaultFormat", "mp3")),
-                item.get("output", None),
-                item.get("images", True)
-            ))
+            batchobj.append(
+                (
+                    soundtrack,
+                    item.get("format", cfg.get("defaultFormat", "mp3")),
+                    item.get("output", None),
+                    item.get("images", True),
+                )
+            )
 
-        elif isinstance(item, str): # This executes if the soundtrack is noted without object
-            batchobj.append((
-                soundtrack,
-                cfg.get("defaultFormat", "mp3"),
-                None,
-                True
-            ))
+        elif isinstance(
+            item, str
+        ):  # This executes if the soundtrack is noted without object
+            batchobj.append((soundtrack, cfg.get("defaultFormat", "mp3"), None, True))
 
     return "batch", batchobj
+
 
 def searchParser(args):
     finalquery = f"https://downloads.khinsider.com/search?search={' '.join(args.query)}&albumListSize=compact&type={'song' if args.song else ''}&sort=name"

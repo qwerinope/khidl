@@ -11,7 +11,5 @@ __pycache__/
 !LICENSE
 !README.md
 !schema.json
-!flake.nix
-!flake.lock
 
 !.github/

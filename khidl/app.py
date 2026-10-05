@@ -10,7 +10,10 @@ class FormatNotAvailable(Exception):
 
     def __init__(self, soundtrack, wantedFormat, *args):
         super().__init__(*args)
-        self.message = f"Format {wantedFormat} isn't available on {soundtrack.name}. Options: {', '.join(soundtrack.formats)}"
+        self.message = (
+            f"Format '{wantedFormat}' is not available for '{soundtrack.name}'. "
+            f"Available formats: {', '.join(soundtrack.formats)}."
+        )
 
     def __str__(self):
         return self.message
@@ -18,7 +21,10 @@ class FormatNotAvailable(Exception):
 
 def downloadManager(soundtrackId, wantedFormat, outDir, getImages):
     if not getImages and wantedFormat == "nomusic":
-        print("Cannot download nothing", file=sys.stderr)
+        print(
+            "Nothing to download: music is disabled and --no-images was specified.",
+            file=sys.stderr,
+        )
         return "err"
 
     ost = Soundtrack(soundtrackId)
@@ -57,17 +63,14 @@ def CLI():
             except FormatNotAvailable as e:
                 print(e, file=sys.stderr)
                 sys.exit(1)
-            except DLParseException:
-                print(
-                    "An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues",
-                    file=sys.stderr,
-                )
+            except DLParseException as e:
+                print(f"Could not download the soundtrack: {e}", file=sys.stderr)
                 sys.exit(1)
 
         case "batch":
             # The data array contains tuples that consist of: (soundtrackId, wantedFormat, outDir, getImages)
             print(
-                f"Succesfully parsed configuration.\nDownloading {len(data)} soundtracks."
+                f"Successfully parsed configuration.\nDownloading {len(data)} soundtracks."
             )
 
             for ost in data:
@@ -76,11 +79,11 @@ def CLI():
                     if status == "err":
                         continue
                 except FormatNotAvailable as e:
-                    print(e)
+                    print(e, file=sys.stderr)
                     continue
-                except DLParseException:
+                except DLParseException as e:
                     print(
-                        "An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues",
+                        f"Could not download this soundtrack: {e}",
                         file=sys.stderr,
                     )
                     continue
@@ -89,12 +92,9 @@ def CLI():
             # Data is a tuple with (query, jsonfilename(optional))
             try:
                 search(*data)
-            except SearchParsingError:
-                print(
-                    "An error occured!\nPlease leave an issue at https://github.com/qwerinope/khidl/issues",
-                    file=sys.stderr,
-                )
+            except SearchParsingError as e:
+                print(f"Could not parse the search results: {e}", file=sys.stderr)
                 sys.exit(1)
             except SearchNoResults:
-                print("No soundtracks matched the requests.", file=sys.stderr)
+                print("No soundtracks matched your search.", file=sys.stderr)
                 sys.exit(1)
